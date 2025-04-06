@@ -7,7 +7,7 @@ import emailjs from 'emailjs-com';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'portfolio';
+  title = 'portfolio-ghailene';
   constructor() {}
 
    // Remplace par tes vrais identifiants EmailJS

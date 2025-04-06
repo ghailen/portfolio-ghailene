@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkportfolio_ghailene=self.webpackChunkportfolio_ghailene||[]).push([[461],{50:()=>{}},e=>{e(e.s=50)}]);
