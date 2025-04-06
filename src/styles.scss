@@ -1,0 +1,42 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+// Palette Material Design
+$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$accent: mat.m2-define-palette(mat.$m2-pink-palette);
+$warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$my-app-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+ /// typography: mat.define-typography-config(),
+//  density: 0,
+));
+
+@include mat.all-component-themes($my-app-theme);
+
+// Global layout
+body {
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  background-color: #f4f6f8;
+  color: #1a1a1a;
+}
+
+// Dark mode
+.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
+
+  .mat-toolbar {
+    background: #1f1f1f !important;
+    color: #ffffff;
+  }
+
+  a, button, span {
+    color: #ffffff !important;
+  }
+}

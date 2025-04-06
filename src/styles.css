@@ -1,0 +1,74 @@
+
+
+
+/* === Expériences organisées === */
+.code-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  background-color: #1e1e1e;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.code-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.code-block {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: 'Courier New', monospace;
+  color: #fff;
+  position: relative;
+}
+
+.code-block .json-key {
+  color: #ffcb6b;
+}
+
+.icon-floating {
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  width: 32px;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+
+
+.skills-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.skill-icon {
+  width: 10px;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
