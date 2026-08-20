@@ -24,6 +24,11 @@
     white-space: nowrap;
     text-decoration: none;
   }
+
+  .active-course {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
 }
 
 @media (max-width: 768px) {

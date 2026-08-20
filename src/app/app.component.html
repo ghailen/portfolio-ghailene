@@ -1,11 +1,13 @@
 <app-navbar></app-navbar>
 
-<main>
+<router-outlet *ngIf="isCoursesRoute"></router-outlet>
+
+<main *ngIf="!isCoursesRoute">
   <section id="home" class="section home-section">
     <div class="content">
       <img src="assets/profile.jpg" alt="Photo de profil" class="profile-pic">
       <h1>Ghailene BEN MARZOUK</h1>
-      <h2 class="typing">6 ans d'expérience en tant que développeur Fullstack Java / Angular / Camunda</h2>
+      <h2 class="typing">7 ans d'expérience en tant que développeur Fullstack Java / Angular / Camunda</h2>
       <p>Bienvenue sur mon portfolio</p>
 
       <div class="social-icons">
@@ -62,6 +64,23 @@
  
 
   <div class="code-row">
+
+      <div class="code-block">
+      <img src="assets/icons/logo-bred.webp"  style="border-radius:10%" width="150px" height="150px" alt="Angular" class="icon-floating">
+      <pre><code>
+        export const experience5 = {{ '{' }}
+          company: "Bred - banque populaire",
+          title: "Ingénieur developpeur Java/Fullstack",
+          description: "Travailler sur des projets liés aux activités de marché 
+          et aux enjeux réglementaires."
+          technologies: ["Java", "Spring", "Angular", "Postgres", "Maven", "gitlab",
+           "Intellij", "rabbitmq", "Apache",  "Springbatch","Jenkins", 
+           "Openshift","Splunk","Sonarqube", "JIRA", 
+           "Control-m", "Ehcache3","TDD", "SCRUM", "Visual Studio","XML", "JSON", "Swagger"],
+          duration: "Aout 2025 jusqu à présent"
+        {{ '}' }};</code></pre>
+    </div>
+
     <div class="code-block">
       <img src="assets/icons/bnp-paribas.jpg"  style="border-radius:10%" width="150px" height="150px" alt="Angular" class="icon-floating">
       <pre><code>
@@ -83,7 +102,8 @@
         export const experience3 = {{ '{' }}
           company: "Protectline",
           title: "Ingénieur developpeur Java/Fullstack",
-          description: "CRM qui offre une vue 360° pour des clients dans le domaine de la télésurveillance."
+          description: "CRM qui offre une vue 360° pour des clients 
+          dans le domaine de la télésurveillance."
           technologies: ["Java", "Spring boot", "Angular", "Mysql", "Maven", "Github", "Intellij", "Kafka", 
           "Camunda", "Sonarqube", "Opencell", "Jira", "Consul", "Vault", "Ehcache", "XML", "JSON", "Keycloak",
            "Zammad", "XSS", "Sonar", "TDD", "SCRUM."],

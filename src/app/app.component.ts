@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import emailjs from 'emailjs-com';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,7 +9,11 @@ import emailjs from 'emailjs-com';
 })
 export class AppComponent {
   title = 'portfolio-ghailene';
-  constructor() {}
+  constructor(private router: Router) {}
+
+  get isCoursesRoute(): boolean {
+    return this.router.url.split('?')[0].startsWith('/mes-cours');
+  }
 
    // Remplace par tes vrais identifiants EmailJS
    serviceID = 'service_e9fomwm';
