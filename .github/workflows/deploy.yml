@@ -27,6 +27,12 @@ jobs:
       - name: Build Angular project
         run: npm run build -- --base-href=/
 
+      # GitHub Pages ne redirige pas automatiquement les URL Angular vers
+      # index.html. Cette copie permet l'accès direct à /mes-cours et aux
+      # autres routes gérées côté navigateur.
+      - name: Create SPA fallback for Angular routes
+        run: cp dist/portfolio-ghailene/index.html dist/portfolio-ghailene/404.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
