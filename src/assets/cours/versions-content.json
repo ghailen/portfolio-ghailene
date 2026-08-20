@@ -1,0 +1,499 @@
+{
+  "paragraph_count": 61,
+  "table_count": 0,
+  "inline_shape_count": 0,
+  "items": [
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 1,
+      "document": "java-17",
+      "style": "Title",
+      "text": "Java 17 — nouveautés et exemples"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 2,
+      "document": "java-17",
+      "style": "Heading 2",
+      "text": "Pourquoi Java 17 est important"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 3,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "Java 17 est une version LTS. Elle réunit notamment les records, les text blocks, les expressions switch, le pattern matching pour instanceof et les classes scellées. Le pattern matching dans switch existe en preview dans Java 17 : il ne faut pas le présenter comme une fonctionnalité finale de cette version."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 4,
+      "document": "java-17",
+      "style": "Heading 2",
+      "text": "Records : objets de données concis"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 5,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "public record User(Long id, String name) {\n  public User {\n    if (id == null || name.isBlank()) {\n      throw new IllegalArgumentException(\"Utilisateur invalide\");\n    }\n  }\n}\n\nvar user = new User(1L, \"Lina\");\nSystem.out.println(user.name());"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 6,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "Un record génère le constructeur canonique, les accesseurs, equals, hashCode et toString. Ses composants sont finaux, mais un record n’est pas forcément profondément immuable si un composant référence un objet mutable."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 7,
+      "document": "java-17",
+      "style": "Heading 2",
+      "text": "Pattern matching pour instanceof"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 8,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "if (value instanceof String text && !text.isBlank()) {\n  System.out.println(text.toUpperCase());\n}\n\n// Plus besoin du cast : String text = (String) value;"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 9,
+      "document": "java-17",
+      "style": "Heading 2",
+      "text": "Classes scellées"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 10,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "public sealed interface Payment permits CardPayment, Transfer { }\n\npublic record CardPayment(String cardNumber) implements Payment { }\npublic record Transfer(String iban) implements Payment { }"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 11,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "sealed contrôle les implémentations autorisées. Une sous-classe doit être final, sealed ou non-sealed. C’est utile pour modéliser un domaine fermé et préparer des traitements exhaustifs."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 12,
+      "document": "java-17",
+      "style": "Heading 2",
+      "text": "Switch expression et text block"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 13,
+      "document": "java-17",
+      "style": "Normal",
+      "text": "String label = switch (status) {\n  case 200, 201 -> \"Succès\";\n  case 404 -> \"Introuvable\";\n  default -> \"Autre\";\n};\n\nString json = \"\"\"\n  {\"name\": \"Lina\", \"active\": true}\n  \"\"\";"
+    },
+
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 1,
+      "document": "java-21",
+      "style": "Title",
+      "text": "Java 21 — nouveautés et exemples"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 2,
+      "document": "java-21",
+      "style": "Heading 2",
+      "text": "Une LTS orientée concurrence et pattern matching"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 3,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "Java 21 finalise les virtual threads, les record patterns et le pattern matching pour switch. Il ajoute aussi les collections séquencées. Structured Concurrency et Scoped Values restent en preview dans cette version et nécessitent --enable-preview."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 4,
+      "document": "java-21",
+      "style": "Heading 2",
+      "text": "Virtual threads"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 5,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n  var future = executor.submit(() -> client.send(request, BodyHandlers.ofString()));\n  System.out.println(future.get().body());\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 6,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "Les virtual threads conviennent surtout aux traitements concurrents qui attendent des entrées-sorties. Ils améliorent la capacité à gérer beaucoup de tâches bloquantes, pas la vitesse d’un calcul CPU intensif. Éviter de les mettre en pool : créer un thread virtuel par tâche."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 7,
+      "document": "java-21",
+      "style": "Heading 2",
+      "text": "Record patterns et switch exhaustif"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 8,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "record Point(int x, int y) { }\n\nstatic int sum(Object value) {\n  return switch (value) {\n    case Point(int x, int y) -> x + y;\n    case null -> 0;\n    default -> -1;\n  };\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 9,
+      "document": "java-21",
+      "style": "Heading 2",
+      "text": "SequencedCollection"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 10,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "SequencedCollection<String> steps = new ArrayList<>();\nsteps.addFirst(\"compiler\");\nsteps.addLast(\"tester\");\nSystem.out.println(steps.getFirst());\nSystem.out.println(steps.reversed());"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 11,
+      "document": "java-21",
+      "style": "Normal",
+      "text": "SequencedCollection, SequencedSet et SequencedMap uniformisent l’accès au premier et au dernier élément ainsi que la vue inversée. String Templates était une preview de Java 21, puis a été retiré : ne pas baser un nouveau code de production dessus."
+    },
+
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 1,
+      "document": "java-25",
+      "style": "Title",
+      "text": "Java 25 — nouveautés et exemples"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 2,
+      "document": "java-25",
+      "style": "Heading 2",
+      "text": "La LTS de septembre 2025"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 3,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "Java 25 est une version LTS. Elle finalise notamment Scoped Values, les déclarations d’import de module, les fichiers source compacts avec méthodes main d’instance et les corps de constructeurs flexibles. Structured Concurrency et les types primitifs dans les patterns restent en preview."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 4,
+      "document": "java-25",
+      "style": "Heading 2",
+      "text": "Fichier source compact"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 5,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "void main() {\n  IO.println(\"Bonjour Java 25\");\n}\n\n// Exécution directe : java Hello.java"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 6,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "Cette syntaxe réduit le cérémonial pour les premiers programmes, scripts et démonstrations. Les applications structurées peuvent continuer à utiliser une classe et public static void main(String[] args)."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 7,
+      "document": "java-25",
+      "style": "Heading 2",
+      "text": "Import de module"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 8,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "import module java.base;\n\nvoid main() {\n  List<String> names = List.of(\"Ada\", \"Lina\");\n  IO.println(names);\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 9,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "import module rend accessibles les types exportés par un module sans écrire chaque import de type. Un import explicite reste prioritaire en cas de nom ambigu."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 10,
+      "document": "java-25",
+      "style": "Heading 2",
+      "text": "Scoped Values finalisés"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 11,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "static final ScopedValue<String> USER = ScopedValue.newInstance();\n\nScopedValue.where(USER, \"alice\").run(() -> {\n  System.out.println(USER.get());\n});"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 12,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "ScopedValue transmet une donnée immuable dans une pile d’appels, y compris avec les threads virtuels. Sa portée bornée est plus sûre et souvent moins coûteuse que ThreadLocal pour ce cas d’usage."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 13,
+      "document": "java-25",
+      "style": "Heading 2",
+      "text": "Constructeur flexible et performances"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 14,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "class Employee extends Person {\n  Employee(String name) {\n    var normalized = name.strip();\n    if (normalized.isEmpty()) throw new IllegalArgumentException();\n    super(normalized);\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 15,
+      "document": "java-25",
+      "style": "Normal",
+      "text": "Java 25 permet de valider et préparer les arguments avant super(...) ou this(...), sans accéder à l’instance non initialisée. Côté JVM, les compact object headers deviennent une fonctionnalité produit à activer, et plusieurs améliorations AOT et JFR facilitent le démarrage et l’observabilité."
+    },
+
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 1,
+      "document": "angular-17",
+      "style": "Title",
+      "text": "Angular 17 — nouveautés et exemples"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 2,
+      "document": "angular-17",
+      "style": "Heading 2",
+      "text": "Nouveau contrôle de flux dans les templates"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 3,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "@if (user()) {\n  <p>Bonjour {{ user()!.name }}</p>\n} @else {\n  <a routerLink=\"/login\">Se connecter</a>\n}\n\n@for (course of courses(); track course.id) {\n  <app-course-card [course]=\"course\" />\n} @empty {\n  <p>Aucun cours.</p>\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 4,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "@if, @for et @switch offrent une syntaxe intégrée plus lisible que les anciennes directives structurelles. Avec @for, l’expression track est importante pour réutiliser efficacement les vues DOM. Cette syntaxe ne nécessite pas CommonModule."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 5,
+      "document": "angular-17",
+      "style": "Heading 2",
+      "text": "Vues différées avec @defer"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 6,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "@defer (on viewport) {\n  <app-heavy-chart />\n} @placeholder {\n  <div class=\"chart-skeleton\">Chargement prochain…</div>\n} @loading (minimum 300ms) {\n  <mat-spinner />\n} @error {\n  <p>Le graphique n’a pas pu être chargé.</p>\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 7,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "@defer sépare le code du bloc dans un chunk chargé à la demande. Les déclencheurs incluent viewport, interaction, hover, idle, timer et when. Les dépendances réellement différées doivent être standalone et ne pas être référencées hors du bloc dans le même fichier."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 8,
+      "document": "angular-17",
+      "style": "Heading 2",
+      "text": "Builder moderne, SSR et hydratation"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 9,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "Angular 17 propose le builder application basé sur esbuild et Vite pour accélérer build et serveur de développement. Les nouveaux projets SSR peuvent activer l’hydratation afin de réutiliser le DOM rendu côté serveur au lieu de le recréer côté client."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 10,
+      "document": "angular-17",
+      "style": "Normal",
+      "text": "bootstrapApplication(AppComponent, {\n  providers: [provideClientHydration()]\n});\n\n// Migration du contrôle de flux :\n// ng generate @angular/core:control-flow"
+    },
+
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 1,
+      "document": "angular-22",
+      "style": "Title",
+      "text": "Angular 22 — nouveautés et exemples"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 2,
+      "document": "angular-22",
+      "style": "Heading 2",
+      "text": "Signal Forms deviennent stables"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 3,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "Angular 22 stabilise Signal Forms dans @angular/forms/signals. Le modèle du formulaire est un signal typé, form() crée un arbre de champs et [formField] synchronise automatiquement la valeur et l’état du contrôle. Pour un projet existant complexe, les Reactive Forms restent supportés : la migration n’est pas obligatoire."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 4,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "import { Component, signal } from '@angular/core';\nimport { form, FormField, required, email } from '@angular/forms/signals';\n\n@Component({\n  standalone: true,\n  imports: [FormField],\n  template: `<input [formField]=\"loginForm.email\">`\n})\nexport class LoginComponent {\n  model = signal({ email: '' });\n  loginForm = form(this.model, path => {\n    required(path.email);\n    email(path.email);\n  });\n}"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 5,
+      "document": "angular-22",
+      "style": "Heading 2",
+      "text": "Lire l’état d’un champ"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 6,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "<input type=\"email\" [formField]=\"loginForm.email\">\n\n@if (loginForm.email().touched() && loginForm.email().invalid()) {\n  <p class=\"error\">{{ loginForm.email().errors()[0].message }}</p>\n}\n\n<button [disabled]=\"loginForm().invalid()\">Connexion</button>"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 7,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "Les états value, valid, invalid, errors, pending, touched, dirty, disabled, hidden et readonly sont exposés sous forme de signaux. Les schémas regroupent les règles de validation et peuvent exprimer des règles conditionnelles."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 8,
+      "document": "angular-22",
+      "style": "Heading 2",
+      "text": "Zoneless par défaut et migration"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 9,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "Angular 22 continue le fonctionnement zoneless activé par défaut depuis Angular 21. Une application notifie Angular via les signaux lus dans les templates, les listeners, AsyncPipe, setInput ou markForCheck, au lieu de dépendre du patch global de ZoneJS."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 10,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "// Une mise à jour de signal déclenche le rafraîchissement ciblé.\nreadonly count = signal(0);\n\nincrement(): void {\n  this.count.update(value => value + 1);\n}\n\n// Après vérification de la compatibilité, retirer zone.js\n// des polyfills de build/test et de package.json."
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 11,
+      "document": "angular-22",
+      "style": "Heading 2",
+      "text": "Points d’entretien à retenir"
+    },
+    {
+      "type": "paragraph",
+      "location": "body",
+      "index": 12,
+      "document": "angular-22",
+      "style": "Normal",
+      "text": "Signal Forms vise les nouvelles applications orientées signaux ; Reactive Forms reste un choix robuste pour l’existant. En zoneless, une mutation silencieuse d’un objet ne suffit pas : mettre à jour un signal, émettre via AsyncPipe ou appeler markForCheck. Tester SSR, bibliothèques tierces et formulaires avant de supprimer ZoneJS d’une application migrée."
+    }
+  ]
+}

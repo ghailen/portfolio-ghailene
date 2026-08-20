@@ -1,0 +1,211 @@
+<main class="courses-page">
+  <header class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Centre de révision</span>
+      <h1>Préparation aux entretiens<br><span>Java & Fullstack</span></h1>
+      <p>Tout le contenu des documents d’entretien, organisé en blocs thématiques et nettoyé pour réviser plus facilement.</p>
+    </div>
+
+    <div class="stats" aria-label="Contenu du cours">
+      <div><strong>{{ sections.length }}</strong><span>thèmes</span></div>
+      <div><strong>{{ totalParagraphs }}</strong><span>notes</span></div>
+      <div><strong>{{ totalImages }}</strong><span>illustrations</span></div>
+    </div>
+  </header>
+
+  <section class="study-toolbar" aria-label="Outils de révision">
+    <label class="search-field">
+      <span class="search-icon">⌕</span>
+      <input
+        type="search"
+        [(ngModel)]="searchTerm"
+        placeholder="Rechercher une notion, une question, une annotation…"
+        aria-label="Rechercher dans les cours">
+      <button *ngIf="searchTerm" type="button" (click)="searchTerm = ''" aria-label="Effacer la recherche">×</button>
+    </label>
+
+    <div class="toolbar-actions">
+      <button type="button" class="secondary" (click)="expandAll()">Tout ouvrir</button>
+      <button type="button" class="secondary" (click)="collapseAll()">Tout fermer</button>
+    </div>
+  </section>
+
+  <div *ngIf="loading" class="state-card">Chargement de toutes les fiches de révision…</div>
+  <div *ngIf="error" class="state-card error">Le contenu du cours n’a pas pu être chargé.</div>
+
+  <section *ngIf="!loading && !error" class="course-layout">
+    <aside class="contents-panel">
+      <span class="panel-label">Sommaire</span>
+      <a
+        *ngFor="let section of filteredSections; trackBy: trackSection"
+        [href]="'#' + section.id"
+        (click)="goToSection(section, $event)">
+        <span>{{ section.title }}</span>
+        <small>{{ section.items.length }}</small>
+      </a>
+    </aside>
+
+    <div class="section-list">
+      <p *ngIf="filteredSections.length === 0" class="state-card">
+        Aucun résultat pour « {{ searchTerm }} ».
+      </p>
+
+      <article
+        *ngFor="let section of filteredSections; let sectionIndex = index; trackBy: trackSection"
+        class="course-block"
+        [id]="section.id">
+        <button
+          type="button"
+          class="block-header"
+          (click)="toggleSection(section)"
+          [attr.aria-expanded]="isOpen(section)">
+          <span class="block-number">{{ (sectionIndex + 1).toString().padStart(2, '0') }}</span>
+          <span class="block-title">
+            <small>Module de révision</small>
+            <strong>{{ section.title }}</strong>
+          </span>
+          <span class="item-count">{{ section.items.length }} éléments</span>
+          <span class="chevron" [class.open]="isOpen(section)">⌄</span>
+        </button>
+
+        <div *ngIf="isOpen(section)" class="block-content">
+          <ng-container *ngFor="let item of section.items; trackBy: trackItem">
+            <hr *ngIf="item.type === 'paragraph' && isDivider(item.text)">
+
+            <h3 *ngIf="item.type === 'paragraph' && item.text && isSubheading(item)">
+              {{ item.text }}
+            </h3>
+
+            <p
+              *ngIf="item.type === 'paragraph' && item.text && !isSubheading(item) && !isDivider(item.text)"
+              [class.code-note]="isCode(item)"
+              [class.reviewed-answer]="item.style === 'Answer'">
+              {{ item.text }}
+            </p>
+
+            <div *ngIf="item.type === 'table'" class="table-wrap">
+              <table>
+                <tbody>
+                  <tr *ngFor="let row of item.rows">
+                    <td *ngFor="let cell of row">{{ cell }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <section *ngIf="item.type === 'algorithm' && item.algorithm as algorithm" class="algorithm-card">
+              <header class="algorithm-heading">
+                <span class="algorithm-number">{{ algorithm.number.toString().padStart(2, '0') }}</span>
+                <span>
+                  <small>{{ algorithm.category }}</small>
+                  <strong>{{ algorithm.title }}</strong>
+                </span>
+                <span class="complexity">{{ algorithm.complexity }}</span>
+              </header>
+
+              <p class="algorithm-explanation">{{ algorithm.explanation }}</p>
+
+              <div *ngIf="algorithmFrame(item) as frame" class="algorithm-demo" aria-live="polite">
+                <div
+                  class="algorithm-values"
+                  role="img"
+                  [attr.aria-label]="algorithm.title + ' : ' + frame.label">
+                  <span
+                    *ngFor="let value of frame.values; let valueIndex = index"
+                    [class.active]="frame.active.includes(valueIndex)"
+                    [class.done]="frame.done.includes(valueIndex)">
+                    {{ value }}
+                  </span>
+                </div>
+
+                <div class="algorithm-status">
+                  <span>Étape {{ algorithmStepNumber(item) }}/{{ algorithm.frames.length }}</span>
+                  <strong>{{ frame.label }}</strong>
+                </div>
+
+                <div class="algorithm-controls">
+                  <button
+                    type="button"
+                    class="secondary"
+                    (click)="previousAlgorithmStep(item)"
+                    [disabled]="algorithmStepNumber(item) === 1">
+                    Précédent
+                  </button>
+                  <button type="button" class="play-button" (click)="playAlgorithm(item)">
+                    {{ isAlgorithmPlaying(item) ? 'Recommencer' : 'Animer' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="secondary"
+                    (click)="nextAlgorithmStep(item)"
+                    [disabled]="algorithmStepNumber(item) === algorithm.frames.length">
+                    Suivant
+                  </button>
+                </div>
+              </div>
+
+              <details class="algorithm-code">
+                <summary>Voir l’exemple Java</summary>
+                <pre><code>{{ algorithm.code }}</code></pre>
+              </details>
+            </section>
+
+            <figure *ngFor="let image of item.images" class="course-figure">
+              <img [src]="imagePath(image)" loading="lazy" alt="Illustration issue du document de révision">
+            </figure>
+          </ng-container>
+
+          <section class="module-quiz" *ngIf="quizzes[section.id] as questions" [attr.aria-labelledby]="section.id + '-quiz-title'">
+            <header class="quiz-heading">
+              <span class="quiz-label">Mini-quiz</span>
+              <h3 [id]="section.id + '-quiz-title'">Vérifiez vos acquis</h3>
+              <p>3 questions basées sur le contenu de ce module.</p>
+            </header>
+
+            <fieldset
+              *ngFor="let question of questions; let questionIndex = index"
+              class="quiz-question"
+              [disabled]="submittedQuizzes.has(section.id)">
+              <legend><span>{{ questionIndex + 1 }}</span>{{ question.prompt }}</legend>
+
+              <label
+                *ngFor="let option of question.options; let optionIndex = index"
+                class="quiz-option"
+                [class.selected]="quizAnswers[quizAnswerKey(section, questionIndex)] === optionIndex"
+                [class.correct]="isQuizOptionCorrect(section, questionIndex, optionIndex)"
+                [class.wrong]="isQuizOptionWrong(section, questionIndex, optionIndex)">
+                <input
+                  type="radio"
+                  [name]="section.id + '-question-' + questionIndex"
+                  [checked]="quizAnswers[quizAnswerKey(section, questionIndex)] === optionIndex"
+                  (change)="selectQuizAnswer(section, questionIndex, optionIndex)">
+                <span>{{ option }}</span>
+              </label>
+
+              <p *ngIf="submittedQuizzes.has(section.id)" class="quiz-explanation">
+                {{ question.explanation }}
+              </p>
+            </fieldset>
+
+            <div class="quiz-footer">
+              <button
+                *ngIf="!submittedQuizzes.has(section.id)"
+                type="button"
+                class="quiz-submit"
+                [disabled]="!isQuizComplete(section)"
+                (click)="submitQuiz(section)">
+                Corriger le quiz
+              </button>
+              <ng-container *ngIf="submittedQuizzes.has(section.id)">
+                <strong class="quiz-score" aria-live="polite">
+                  Score : {{ quizScore(section) }}/{{ questions.length }}
+                </strong>
+                <button type="button" class="secondary" (click)="resetQuiz(section)">Recommencer</button>
+              </ng-container>
+            </div>
+          </section>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
